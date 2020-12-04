@@ -27,6 +27,21 @@ const StyledLogo = styled.div`
   font-size: 22px;
 `
 
+const StyledContentLayout = styled(Layout)`
+  display: flex;
+  flex-direction: column;
+`
+
+const StyledContent = styled(Content)`
+  flex: 1;
+  overflow: scroll;
+  padding: 20px;
+
+  & > *:not(:last-child) {
+    margin-bottom: 20px;
+  }
+`
+
 const sections = [
   { name: 'recommended', displayName: 'Recommended' },
   { name: 'buynow', displayName: 'Buy Now' },
@@ -65,15 +80,16 @@ const Dashboard: FC = () => {
           <Skeleton loading={isLoading} paragraph={{ rows: 4 }} />
         </Menu>
       </Sider>
-      <Layout>
-        <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
-        <Content style={{ margin: '24px 16px 0' }}>
+
+      <StyledContentLayout>
+        <Header className="site-layout-sub-header-background" />
+
+        <StyledContent>
           {sections.map((section) => (
             <Section title={section.displayName} key={section.name} tag={section.name} />
           ))}
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-      </Layout>
+        </StyledContent>
+      </StyledContentLayout>
     </StyledLayout>
   )
 }
