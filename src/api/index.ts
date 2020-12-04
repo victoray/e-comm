@@ -1,9 +1,5 @@
 import axios from 'axios'
-
-type Category = {
-  title: string
-  alias: string
-}
+import { Category, Product } from './types'
 
 const axiosInstance = axios.create({
   baseURL: 'https://euas.person.ee',
@@ -27,11 +23,11 @@ class Api {
     return axiosInstance.get(`/products/${productId}`)
   }
 
-  static getProducts(): Promise<Array<Category>> {
+  static getProducts(): Promise<Array<Product>> {
     return axiosInstance.get('/products/')
   }
 
-  static getProductsByTag(sectionName: string): Promise<Array<Category>> {
+  static getProductsByTag(sectionName: string): Promise<Array<Product>> {
     return axiosInstance.get(`/sections/${sectionName}/products`)
   }
 

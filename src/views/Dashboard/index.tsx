@@ -5,6 +5,7 @@ import styled, { createGlobalStyle } from 'styled-components/macro'
 import { useQuery } from 'react-query'
 
 import Api from '../../api'
+import Section from './Section'
 
 const { Header, Content, Sider, Footer } = Layout
 
@@ -26,7 +27,11 @@ const StyledLogo = styled.div`
   font-size: 22px;
 `
 
-const sections = ['recommended', 'buynow', 'topselling']
+const sections = [
+  { name: 'recommended', displayName: 'Recommended' },
+  { name: 'buynow', displayName: 'Buy Now' },
+  { name: 'topselling', displayName: 'Top Selling' }
+]
 
 const Dashboard: FC = () => {
   const { data: categories, isLoading } = useQuery('categories', Api.getCategories)
@@ -63,9 +68,9 @@ const Dashboard: FC = () => {
       <Layout>
         <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
         <Content style={{ margin: '24px 16px 0' }}>
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            content
-          </div>
+          {sections.map((section) => (
+            <Section title={section.displayName} key={section.name} tag={section.name} />
+          ))}
         </Content>
         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
       </Layout>
