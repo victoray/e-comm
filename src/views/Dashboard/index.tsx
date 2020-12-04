@@ -1,7 +1,10 @@
 import React, { FC } from 'react'
-import { Layout, Menu } from 'antd'
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
+import { Layout, Menu, Skeleton } from 'antd'
+import { HomeOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
 import styled, { createGlobalStyle } from 'styled-components/macro'
+import { useQuery } from 'react-query'
+
+import Api from '../../api'
 
 const { Header, Content, Sider, Footer } = Layout
 
@@ -23,7 +26,11 @@ const StyledLogo = styled.div`
   font-size: 22px;
 `
 
+const sections = ['recommended', 'buynow', 'topselling']
+
 const Dashboard: FC = () => {
+  const { data: categories, isLoading } = useQuery('categories', Api.getCategories)
+
   return (
     <StyledLayout>
       <Sider
@@ -37,19 +44,20 @@ const Dashboard: FC = () => {
         }}
       >
         <StyledLogo>E Shop</StyledLogo>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-          <Menu.Item key="1" icon={<UserOutlined />}>
-            nav 1
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']}>
+          <Menu.Item key="home" icon={<HomeOutlined />}>
+            Home
           </Menu.Item>
-          <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-            nav 2
-          </Menu.Item>
-          <Menu.Item key="3" icon={<UploadOutlined />}>
-            nav 3
-          </Menu.Item>
-          <Menu.Item key="4" icon={<UserOutlined />}>
-            nav 4
-          </Menu.Item>
+
+          {categories?.map((category) => {
+            return (
+              <Menu.Item key={category.alias} icon={<VideoCameraOutlined />}>
+                {category.title}
+              </Menu.Item>
+            )
+          })}
+
+          <Skeleton loading={isLoading} paragraph={{ rows: 4 }} />
         </Menu>
       </Sider>
       <Layout>
