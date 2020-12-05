@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, Fragment } from 'react'
 import { Layout, Menu, Skeleton } from 'antd'
 import { HomeOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
 import styled, { createGlobalStyle } from 'styled-components/macro'
@@ -6,6 +6,8 @@ import { useQuery } from 'react-query'
 
 import Api from '../../api'
 import Section from './Section'
+import { Route, useHistory, Switch } from 'react-router-dom'
+import CategorySection from './CategorySection'
 
 const { Header, Content, Sider, Footer } = Layout
 
@@ -37,8 +39,8 @@ const StyledContent = styled(Content)`
   overflow: scroll;
   padding: 20px;
 
-  & > *:not(:last-child) {
-    margin-bottom: 20px;
+  & > * {
+    margin-bottom: 30px;
   }
 `
 
@@ -49,6 +51,7 @@ const sections = [
 ]
 
 const Dashboard: FC = () => {
+  const history = useHistory()
   const { data: categories, isLoading } = useQuery('categories', Api.getCategories)
 
   return (
@@ -65,13 +68,17 @@ const Dashboard: FC = () => {
       >
         <StyledLogo>E Shop</StyledLogo>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']}>
-          <Menu.Item key="home" icon={<HomeOutlined />}>
+          <Menu.Item key="home" icon={<HomeOutlined />} onClick={() => history.push('/')}>
             Home
           </Menu.Item>
 
           {categories?.map((category) => {
             return (
-              <Menu.Item key={category.alias} icon={<VideoCameraOutlined />}>
+              <Menu.Item
+                key={category.alias}
+                icon={<VideoCameraOutlined />}
+                onClick={() => history.push(`/${category.alias}`)}
+              >
                 {category.title}
               </Menu.Item>
             )
@@ -85,9 +92,26 @@ const Dashboard: FC = () => {
         <Header className="site-layout-sub-header-background" />
 
         <StyledContent>
-          {sections.map((section) => (
-            <Section title={section.displayName} key={section.name} tag={section.name} />
-          ))}
+          <Switch>
+            {categories?.map((category) => {
+              return (
+                <Route
+                  path={`/${category.alias}`}
+                  component={() => <CategorySection category={category} key={category.alias} />}
+                />
+              )
+            })}
+
+            <Route
+              component={() => (
+                <Fragment>
+                  {sections.map((section) => (
+                    <Section title={section.displayName} key={section.name} tag={section.name} />
+                  ))}
+                </Fragment>
+              )}
+            />
+          </Switch>
         </StyledContent>
       </StyledContentLayout>
     </StyledLayout>

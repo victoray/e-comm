@@ -15,7 +15,7 @@ class Api {
     return axiosInstance.get('/categories')
   }
 
-  static getCategoryProducts(alias: string): Promise<Array<Category>> {
+  static getCategoryProducts(alias: string): Promise<Array<Product>> {
     return axiosInstance.get(`/categories/${alias}/products`)
   }
 
