@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Product } from '../api/types'
-import { Card } from 'antd'
+import { Button, Card } from 'antd'
 import styled from 'styled-components/macro'
 import { EditOutlined, EllipsisOutlined, SettingOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 
@@ -15,7 +15,11 @@ const ProductCard: FC<{ product: Product }> = ({ product }) => {
       hoverable
       style={{ width: 250 }}
       cover={<StyledImage alt="example" src={product.image} />}
-      actions={[<SettingOutlined key="setting" />, <ShoppingCartOutlined key={'shopping'} />]}
+      actions={[
+        <Button icon={<ShoppingCartOutlined />} key={'shopping'} type={'primary'}>
+          Add to cart
+        </Button>
+      ]}
     >
       <Card.Meta title={product.title} />
     </Card>
